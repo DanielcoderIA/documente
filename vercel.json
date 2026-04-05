@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "regions": ["gru1"],
+  "functions": {
+    "app/api/documentos/procesar/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/chat/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/exportar/excel/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}
