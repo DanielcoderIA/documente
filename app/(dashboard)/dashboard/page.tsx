@@ -65,6 +65,17 @@ export default function DashboardPage() {
   const [modalNuevoProyectoAbierto, setModalNuevoProyectoAbierto] = useState(false);
   const [modalUploadAbierto, setModalUploadAbierto] = useState(false);
 
+  // Auto-Login Demo Toast
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const demoToast = sessionStorage.getItem("showDemoToast");
+      if (demoToast === "true") {
+        toast.success("Modo Demo: Explora el análisis de documentos legal/contable", { duration: 5000 });
+        sessionStorage.removeItem("showDemoToast");
+      }
+    }
+  }, []);
+
 
 
   const proyectoActivo = proyectos.find((p) => p.id === proyectoActivoId) ?? null;
