@@ -2,18 +2,36 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Send, Bot, FileText, CheckCircle2, AlertTriangle, ListChecks, Sparkles } from "lucide-react";
-import type { ProyectoUI } from "@/types/app";
+import type { ProyectoUI, MensajeChat } from "@/types/app";
 import { useChat } from "@/hooks/useChat";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ChatPanelProps {
   proyectoActivo: ProyectoUI | null;
   documentoSeleccionadoId: string | null;
+  /** Mensajes pre-cargados (usado en Modo Demo) */
+  mensajesIniciales?: MensajeChat[];
+  /** Indica si la app está en modo invitado */
+  isDemo?: boolean;
 }
 
-export function ChatPanel({ proyectoActivo, documentoSeleccionadoId }: ChatPanelProps) {
-  const { messages, isLoading, error, sendMessage, sendQuickAction } = useChat();
+export function ChatPanel({
+  proyectoActivo,
+  documentoSeleccionadoId,
+  mensajesIniciales,
+  isDemo = false,
+}: ChatPanelProps) {
+  const { messages, isLoading, error, sendMessage, sendQuickAction, setMessages } = useChat();
   const [inputValue, setInputValue] = useState("");
+
+  // Sembrar mensajes mock al montar en modo demo
+  useEffect(() => {
+    if (isDemo && mensajesIniciales && mensajesIniciales.length > 0) {
+      setMessages(mensajesIniciales);
+    }
+    // Solo al montar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDemo]);
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll the chat
@@ -213,47 +231,61 @@ export function ChatPanel({ proyectoActivo, documentoSeleccionadoId }: ChatPanel
 
       {/* ── INPUT ──────────────────────────────────────────── */}
       <div className="p-4 bg-[#252526] border-t border-[rgba(255,255,255,0.06)] flex-shrink-0">
-        <form
-          onSubmit={handleSubmit}
-          className="relative flex items-end gap-2 bg-[#1e1e1e] rounded-xl border border-[rgba(255,255,255,0.08)] p-1.5 focus-within:border-[#1D9E75]/50 focus-within:ring-1 focus-within:ring-[#1D9E75]/20 transition-all shadow-inner"
-        >
-          <textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            disabled={isLoading || !proyectoActivo?.id}
-            placeholder={isLoading ? "La IA está respondiendo..." : "Pregúntale a DocuMente sobre este caso..."}
-            className="flex-1 max-h-32 min-h-[40px] bg-transparent border-none text-[13px] text-white resize-none px-3 py-2.5 outline-none placeholder:text-[#636363] disabled:opacity-50"
-            rows={1}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e);
-              }
-            }}
-          />
-          <button
-            type="submit"
-            disabled={!inputValue.trim() || isLoading || !proyectoActivo?.id}
-            className={`
-              flex flex-shrink-0 items-center justify-center w-10 h-10 rounded-lg transition-all
-              ${
-                !inputValue.trim() || isLoading
-                  ? "bg-[rgba(255,255,255,0.05)] text-[#636363]"
-                  : "bg-[#1D9E75] hover:bg-[#178f68] text-white shadow-lg shadow-[#1D9E75]/20"
-              }
-            `}
+        {isDemo ? (
+          /* Aviso Demo — no se envían mensajes reales */
+          <div className="flex flex-col items-center gap-2 py-3 px-2 border border-[#1D9E75]/20 bg-[#1D9E75]/5">
+            <p className="text-[10px] text-[#1D9E75] font-mono uppercase tracking-widest text-center">
+              Chat IA activo en modo demo
+            </p>
+            <p className="text-[9px] text-[rgba(255,255,255,0.3)] text-center leading-relaxed">
+              Crea una cuenta gratuita para analizar tus propios documentos con IA.
+            </p>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="relative flex items-end gap-2 bg-[#1e1e1e] rounded-xl border border-[rgba(255,255,255,0.08)] p-1.5 focus-within:border-[#1D9E75]/50 focus-within:ring-1 focus-within:ring-[#1D9E75]/20 transition-all shadow-inner"
           >
-            <Send size={16} className={!inputValue.trim() || isLoading ? "" : "ml-0.5"} />
-          </button>
-        </form>
-        <div className="flex items-center justify-between mt-2 px-1">
-          <p className="text-[9px] text-[#636363]">
-            Soporta PDFs múltiples de forma nativa vía embebido directo.
-          </p>
-          <p className="text-[9px] text-[#636363]">
-            Enter para enviar · Shift+Enter salto de línea
-          </p>
-        </div>
+            <textarea
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              disabled={isLoading || !proyectoActivo?.id}
+              placeholder={isLoading ? "La IA está respondiendo..." : "Pregúntale a DocuMente sobre este caso..."}
+              className="flex-1 max-h-32 min-h-[40px] bg-transparent border-none text-[13px] text-white resize-none px-3 py-2.5 outline-none placeholder:text-[#636363] disabled:opacity-50"
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
+            />
+            <button
+              type="submit"
+              disabled={!inputValue.trim() || isLoading || !proyectoActivo?.id}
+              className={`
+                flex flex-shrink-0 items-center justify-center w-10 h-10 rounded-lg transition-all
+                ${
+                  !inputValue.trim() || isLoading
+                    ? "bg-[rgba(255,255,255,0.05)] text-[#636363]"
+                    : "bg-[#1D9E75] hover:bg-[#178f68] text-white shadow-lg shadow-[#1D9E75]/20"
+                }
+              `}
+            >
+              <Send size={16} className={!inputValue.trim() || isLoading ? "" : "ml-0.5"} />
+            </button>
+          </form>
+        )}
+        {!isDemo && (
+          <div className="flex items-center justify-between mt-2 px-1">
+            <p className="text-[9px] text-[#636363]">
+              Soporta PDFs múltiples de forma nativa vía embebido directo.
+            </p>
+            <p className="text-[9px] text-[#636363]">
+              Enter para enviar · Shift+Enter salto de línea
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
