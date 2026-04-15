@@ -1,21 +1,39 @@
 import { SignIn } from "@clerk/nextjs";
+import { DemoButton } from "@/components/auth/DemoButton";
 
 export default function SignInPage() {
   return (
     // Centrado en pantalla con fondo degradado oscuro de DocuMente
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e1b4b]">
-      <div className="flex flex-col items-center gap-6">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#020617] to-[#1e1b4b] py-12 px-4">
+      <div className="flex flex-col items-center gap-8 w-full max-w-[400px]">
         {/* Logo y nombre de la app */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-4xl font-bold text-white tracking-tight">
             Docu<span className="text-[#1D9E75]">Mente</span>
           </h1>
-          <p className="text-slate-400 text-sm mt-1 font-medium">
+          <p className="text-slate-400 text-sm mt-2 font-medium">
             Análisis inteligente de documentos
           </p>
         </div>
 
-        {/* Componente oficial de Clerk configurado en modo enrutamiento catch-all */}
+        <div className="w-full flex flex-col gap-6">
+          {/* Botón de acceso directo para Modo Demo */}
+          <DemoButton />
+
+          {/* Separador Visual */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[rgba(255,255,255,0.1)]" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-[#0b101e] px-3 tracking-wider text-[#636363] font-medium rounded-full">
+                o usa tu cuenta
+              </span>
+            </div>
+          </div>
+
+          <div className="flex justify-center w-full">
+            {/* Componente oficial de Clerk configurado en modo enrutamiento catch-all */}
         <SignIn
           path="/sign-in"
           routing="path"
@@ -43,6 +61,8 @@ export default function SignInPage() {
             },
           }}
         />
+        </div>
+      </div>
       </div>
     </main>
   );
