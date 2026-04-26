@@ -303,7 +303,13 @@ export default function DashboardPage() {
                       </div>
                     ) : documentoSeleccionadoUrl ? (
                       <iframe
-                        src={`${documentoSeleccionadoUrl}#toolbar=0`}
+                        src={
+                          /Mobi|Android|iPhone|iPad/i.test(
+                            typeof navigator !== 'undefined' ? navigator.userAgent : ''
+                          )
+                            ? `https://docs.google.com/viewer?url=${encodeURIComponent(documentoSeleccionadoUrl)}&embedded=true`
+                            : `${documentoSeleccionadoUrl}#toolbar=0`
+                        }
                         className="w-full h-full border-none rounded bg-white shadow-2xl"
                       />
                     ) : (
