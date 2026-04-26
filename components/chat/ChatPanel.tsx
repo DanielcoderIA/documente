@@ -58,7 +58,7 @@ export function ChatPanel({
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#252526] border-l border-[rgba(255,255,255,0.06)]">
+    <div className="flex flex-col h-full min-h-0 bg-[#252526] border-l border-[rgba(255,255,255,0.06)]">
       {/* ── HEADER ─────────────────────────────────────────── */}
       <div className="flex flex-col px-4 py-3 border-b border-[rgba(255,255,255,0.06)] bg-[#252526] flex-shrink-0">
         <div className="flex items-center gap-2 mb-1">
@@ -200,7 +200,7 @@ export function ChatPanel({
                           title={f.contenido}
                         >
                           <FileText size={10} className="text-[#1D9E75]" />
-                          <span className="text-[10px] text-[#858585] truncate max-w-[120px]">
+                          <span className="text-[10px] text-[#858585] truncate max-w-[80px] sm:max-w-[120px]">
                             {f.documentoNombre} (Pag {f.pagina})
                           </span>
                         </div>
@@ -277,7 +277,7 @@ export function ChatPanel({
           </form>
         )}
         {!isDemo && (
-          <div className="flex items-center justify-between mt-2 px-1">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mt-2 px-1">
             <p className="text-[9px] text-[#636363]">
               Soporta PDFs múltiples de forma nativa vía embebido directo.
             </p>
