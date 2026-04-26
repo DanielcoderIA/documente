@@ -112,7 +112,7 @@ export function UploadPDF({ proyectoId, onUploadSuccess }: UploadPDFProps) {
       <div 
         className={`
           flex flex-col items-center justify-center border-2 border-dashed
-          rounded-xl p-8 transition-all duration-200 cursor-pointer
+          rounded-xl p-4 sm:p-8 transition-all duration-200 cursor-pointer
           ${isDragActive 
             ? "border-primary bg-primary/10 scale-[1.02]" 
             : "border-border/60 bg-black/10 hover:border-border hover:bg-black/20"
@@ -164,7 +164,7 @@ export function UploadPDF({ proyectoId, onUploadSuccess }: UploadPDFProps) {
               <div className="flex items-center gap-3 min-w-0 z-10">
                 <File className={`w-5 h-5 flex-shrink-0 ${a.estado === 'error' ? 'text-destructive' : 'text-primary'}`} />
                 <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-medium text-foreground truncate max-w-[150px] sm:max-w-xs">
+                  <span className="text-xs font-medium text-foreground truncate max-w-[120px] sm:max-w-[150px]">
                     {a.file.name}
                   </span>
                   

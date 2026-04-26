@@ -22,7 +22,7 @@ import { OCRPanel } from "@/components/dashboard/OCRPanel";
 import { DemoBanner } from "@/components/demo/DemoBanner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createClient } from "@/lib/supabase/client";
+import { useSupabaseClient } from "@/lib/supabase/client";
 
 import { PROYECTOS_MOCK, MENSAJES_MOCK } from "@/constants/mock-data";
 import { useProyectos, Proyecto } from "@/hooks/useProyectos";
@@ -77,7 +77,7 @@ export default function DashboardPage() {
   const [documentoSeleccionadoNombre, setDocumentoSeleccionadoNombre] = useState<string | null>(null);
   const [ocrAbierto, setOcrAbierto] = useState(false);
 
-  const supabase = createClient();
+  const supabase = useSupabaseClient();
 
   // Responsive / Layout
   const [mostrarSidebar, setMostrarSidebar] = useState(true);
@@ -189,7 +189,7 @@ export default function DashboardPage() {
         </Dialog>
 
         {/* ── PANEL 1: SIDEBAR ─────────────────────────────────── */}
-        <div className={`transition-all duration-200 overflow-hidden flex-shrink-0 ${mostrarSidebar ? "w-[200px]" : "w-0"}`}>
+        <div className={`transition-all duration-200 overflow-hidden flex-shrink-0 fixed inset-y-0 left-0 z-50 w-[85vw] md:relative md:inset-auto md:z-auto ${mostrarSidebar ? "translate-x-0 md:w-[200px]" : "-translate-x-full md:translate-x-0 md:w-0"}`}>
           <Sidebar
             proyectos={proyectos}
             loading={loading}
@@ -229,7 +229,7 @@ export default function DashboardPage() {
           <div className="flex flex-1 overflow-hidden flex-row">
             {/* Lista Docs */}
             {proyectoActivo && proyectoActivo.cantidadDocs > 0 && (
-              <div className="w-[260px] bg-[#252526] border-r border-[rgba(255,255,255,0.06)] flex flex-col flex-shrink-0">
+              <div className="w-[260px] bg-[#252526] border-r border-[rgba(255,255,255,0.06)] hidden md:flex flex-col flex-shrink-0">
                 <DocumentList
                   documentos={proyectoActivo.documentos || []}
                   documentoSeleccionado={documentoSeleccionadoId}
@@ -247,8 +247,8 @@ export default function DashboardPage() {
                     {documentoSeleccionadoNombre
                       ? documentoSeleccionadoNombre
                       : proyectoActivo
-                      ? `${proyectoActivo.nombre} — Visor Consolidado`
-                      : "Sin documento"}
+                        ? `${proyectoActivo.nombre} — Visor Consolidado`
+                        : "Sin documento"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
@@ -368,7 +368,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ── PANEL 3: CHAT IA ─────────────────────────────────── */}
-        <div className={`transition-all duration-200 overflow-hidden flex-shrink-0 ${mostrarChat ? "w-[280px]" : "w-0"}`}>
+        <div className={`transition-all duration-200 overflow-hidden flex-shrink-0 fixed inset-y-0 right-0 z-50 w-[85vw] md:relative md:inset-auto md:z-auto ${mostrarChat ? "translate-x-0 md:w-[280px]" : "translate-x-full md:translate-x-0 md:w-0"}`}>
           {loading ? (
             <div className="p-4 space-y-4 pt-10 border-l border-[rgba(255,255,255,0.06)] h-full bg-[#252526]">
               <Skeleton className="h-[22px] w-1/3 bg-[rgba(255,255,255,0.04)]" />

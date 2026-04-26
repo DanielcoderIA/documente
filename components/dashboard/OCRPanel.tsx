@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, FileText, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { useSupabaseClient } from "@/lib/supabase/client";
 
 interface OCRPanelProps {
   isOpen: boolean;
@@ -22,8 +22,8 @@ export function OCRPanel({ isOpen, onClose, documentoId, documentoNombre }: OCRP
     const fetchFragmentos = async () => {
       setLoading(true);
       setError(null);
-      const supabase = createClient();
-      
+      const supabase = useSupabaseClient();
+
       try {
         const { data, error: sbError } = await supabase
           .from("fragmentos")
@@ -49,14 +49,14 @@ export function OCRPanel({ isOpen, onClose, documentoId, documentoNombre }: OCRP
   return (
     <>
       {/* Overlay */}
-      <div 
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity" 
+      <div
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* Panel / Sheet */}
       <div className="fixed top-0 right-0 h-full w-[400px] bg-[#1e1e1e] border-l border-[rgba(255,255,255,0.06)] shadow-2xl z-50 flex flex-col transform transition-transform duration-300">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[rgba(255,255,255,0.06)] bg-[#252526]">
           <div className="flex flex-col">
@@ -67,7 +67,7 @@ export function OCRPanel({ isOpen, onClose, documentoId, documentoNombre }: OCRP
               {documentoNombre || "Documento"}
             </span>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-1.5 rounded-md hover:bg-white/10 text-[#858585] hover:text-white transition-colors"
           >

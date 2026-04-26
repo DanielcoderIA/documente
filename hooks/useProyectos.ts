@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
-import { createClient } from "@/lib/supabase/client";
+import { useSupabaseClient } from "@/lib/supabase/client";
 import type { ProyectoUI } from "@/types/app";
 
 // Mapeos de iconos lucide permitidos o usar por defecto
@@ -25,8 +25,8 @@ export interface Proyecto {
 
 export function useProyectos() {
   const { user, isLoaded: isClerkLoaded } = useUser();
-  const supabase = createClient();
-  
+  const supabase = useSupabaseClient(); // ← JWT de Clerk inyectado automáticamente
+
   const [proyectos, setProyectos] = useState<ProyectoUI[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export function useProyectos() {
         .order("created_at", { ascending: false });
 
       if (sbError) throw sbError;
-      
+
       const formateados: ProyectoUI[] = data.map((p: any) => ({
         id: p.id,
         nombre: p.nombre,
@@ -82,21 +82,19 @@ export function useProyectos() {
     cargarProyectos();
   }, [cargarProyectos]);
 
-  // Crear nuevo proyecto y retornar tipado explícito
+  // Crear nuevo proyecto
   const crearProyecto = async (nombre: string, color: string, descripcion: string = ""): Promise<Proyecto | null> => {
     if (!user) throw new Error("Debes autenticarte primero para crear proyectos");
-    
+
     try {
       console.log("userId al crear:", user.id);
 
-      // Fuerza el tipado a any en el insert para evitar que el compilador choque
-      // con esquemas no generados estrictamente.
       const payload = {
-        user_id: user.id, // clerk_user_id
+        user_id: user.id,
         nombre,
         color,
         descripcion,
-        icono: "folder"
+        icono: "folder",
       };
 
       const { data, error } = await supabase
@@ -104,9 +102,9 @@ export function useProyectos() {
         .insert(payload as any)
         .select()
         .single();
-        
+
       if (error) throw error;
-      
+
       await cargarProyectos();
       return data as Proyecto;
     } catch (err: any) {
@@ -118,16 +116,16 @@ export function useProyectos() {
   // Eliminar proyecto existente
   const eliminarProyecto = async (id: string) => {
     if (!user) return;
-      
+
     try {
       const { error } = await supabase
         .from("proyectos")
         .delete()
         .eq("id", id)
         .eq("user_id", user.id);
-        
+
       if (error) throw error;
-      
+
       await cargarProyectos();
     } catch (err: any) {
       console.error("Error al eliminar proyecto:", err);
@@ -135,12 +133,12 @@ export function useProyectos() {
     }
   };
 
-  return { 
-    proyectos, 
-    loading, 
-    error, 
-    crearProyecto, 
+  return {
+    proyectos,
+    loading,
+    error,
+    crearProyecto,
     eliminarProyecto,
-    recargarProyectos: cargarProyectos
+    recargarProyectos: cargarProyectos,
   };
 }
