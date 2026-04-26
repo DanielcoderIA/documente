@@ -82,6 +82,7 @@ export default function DashboardPage() {
   // Responsive / Layout
   const [mostrarSidebar, setMostrarSidebar] = useState(true);
   const [mostrarChat, setMostrarChat] = useState(true);
+  const [mostrarDocs, setMostrarDocs] = useState(false);
 
   // Modales
   const [modalNuevoProyectoAbierto, setModalNuevoProyectoAbierto] = useState(false);
@@ -229,7 +230,7 @@ export default function DashboardPage() {
           <div className="flex flex-1 overflow-hidden flex-row">
             {/* Lista Docs */}
             {proyectoActivo && proyectoActivo.cantidadDocs > 0 && (
-              <div className="w-[260px] bg-[#252526] border-r border-[rgba(255,255,255,0.06)] hidden md:flex flex-col flex-shrink-0">
+              <div className={`w-[260px] bg-[#252526] border-r border-[rgba(255,255,255,0.06)] ${mostrarDocs ? 'flex' : 'hidden'} md:flex flex-col flex-shrink-0`}>
                 <DocumentList
                   documentos={proyectoActivo.documentos || []}
                   documentoSeleccionado={documentoSeleccionadoId}
@@ -392,6 +393,9 @@ export default function DashboardPage() {
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 md:hidden z-50">
           <button onClick={() => setMostrarSidebar((v) => !v)} className="px-3 py-1.5 rounded-full bg-[#252526] border border-white/10 text-[11px] text-[#858585]">
             {mostrarSidebar ? "← Sidebar" : "Sidebar →"}
+          </button>
+          <button onClick={() => setMostrarDocs((v) => !v)} className="px-3 py-1.5 rounded-full bg-[#252526] border border-white/10 text-[11px] text-[#858585]">
+            {mostrarDocs ? "Docs ✕" : "📄 Docs"}
           </button>
           <button onClick={() => setMostrarChat((v) => !v)} className="px-3 py-1.5 rounded-full bg-[#252526] border border-white/10 text-[11px] text-[#858585]">
             {mostrarChat ? "Chat →" : "← Chat"}

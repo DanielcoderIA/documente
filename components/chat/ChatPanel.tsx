@@ -230,7 +230,7 @@ export function ChatPanel({
       </div>
 
       {/* ── INPUT ──────────────────────────────────────────── */}
-      <div className="p-4 bg-[#252526] border-t border-[rgba(255,255,255,0.06)] flex-shrink-0">
+      <div className="p-4 pb-16 sm:pb-4 bg-[#252526] border-t border-[rgba(255,255,255,0.06)] flex-shrink-0">
         {isDemo ? (
           /* Aviso Demo — no se envían mensajes reales */
           <div className="flex flex-col items-center gap-2 py-3 px-2 border border-[#1D9E75]/20 bg-[#1D9E75]/5">
