@@ -23,7 +23,7 @@ export function Header({
   onExportar,
 }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between px-4 py-2.5 bg-[#1e1e1e] border-b border-[rgba(255,255,255,0.06)] flex-shrink-0 h-12">
+    <header className="flex items-center justify-between px-2 sm:px-4 py-2.5 bg-[#1e1e1e] border-b border-[rgba(255,255,255,0.06)] flex-shrink-0 h-12">
       {/* ── BREADCRUMB ─────────────────────────────────────── */}
       <div className="flex items-center gap-1.5 min-w-0">
         <Folder size={13} className="text-[#636363] flex-shrink-0" />
@@ -54,7 +54,7 @@ export function Header({
       </div>
 
       {/* ── ACCIONES ───────────────────────────────────────── */}
-      <div className="flex items-center gap-1.5 flex-shrink-0">
+      <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
         {/* Botón OCR */}
         <button
           id="btn-ocr"
@@ -92,14 +92,14 @@ export function Header({
           id="btn-agregar-pdf"
           onClick={onSubirPDF}
           className="
-            flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold
+            flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-md text-xs font-semibold
             bg-[#1D9E75] hover:bg-[#178f68] text-white
             transition-all duration-150 shadow-md shadow-[rgba(29,158,117,0.25)]
             hover:shadow-[rgba(29,158,117,0.4)]
           "
         >
           <Upload size={12} />
-          <span>+ Agregar PDF</span>
+          <span className="hidden sm:inline">+ Agregar PDF</span>
         </button>
       </div>
     </header>
